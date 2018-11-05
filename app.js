@@ -1,4 +1,3 @@
-
 class Vec
 {
     constructor (x = 0, y = 0)
@@ -79,37 +78,6 @@ class Pong{
             requestAnimationFrame(callBack);
         };
         callBack();
-
-        this.Char_pixel = 10;
-        this.Chars = [
-            '111101101101111', // 0
-            '010010010010010', // 1
-            '111001111100111', // 2
-            '111001111001111', // 3
-            '101101111001001', // 4
-            '111100111001111', // 5
-            '111100111101111', // 6
-            '111001001001001', // 7
-            '111101111101111', // 8
-            '111101111001111' // 9 
-        ].map(str => {
-            const canvas = document.createElement('canvas');
-            canvas.height = this.Char_pixel * 5;
-            canvas.width = this.Char_pixel * 3;
-            const c = canvas.getContext('2d');
-            c.fillStyle = '#fff';
-            str.split('').forEach((fill, i) => {
-                if(fill === '1') {
-                    c.fillRect(
-                        (i % 3) * this.Char_pixel,
-                        Math.floor(i / 3) * this.Char_pixel,
-                        this.Char_pixel,
-                        this.Char_pixel);
-                }
-            });
-            return canvas;  
-        });
-
         this.reset();
     }
 
@@ -152,15 +120,11 @@ class Pong{
     }
 
     drawScore() {
-        const align = this._canvas.width / 3;
-        const Char_w = this.Char_pixel * 4;
-        this.players.forEach((player, index) => {
-            const chars = player.score.toString().split('');
-            const offset = align * (index + 1) - (Char_w * chars.length / 2) + this.Char_pixel / 2;
-            chars.forEach((char, pos) => {
-                this.c.drawImage(this.Chars[parseInt(char)], offset + pos * Char_w, 20);
-            });
-        });
+        this.scorePose = this._canvas.width /4;
+        this.scoreText = this._canvas.getContext('2d');
+        this.scoreText.font = '48px serif';
+        this.scoreText.fillText(this.players[1].score, this._canvas.width - this.scorePose, 50);
+        this.scoreText.fillText(this.players[0].score, this.scorePose, 50);
     }
 
     update(dt) {
